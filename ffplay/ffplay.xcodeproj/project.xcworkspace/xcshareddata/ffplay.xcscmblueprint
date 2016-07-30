@@ -1,0 +1,37 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "A807948ACB4487F441165246C2C71068A30465AA",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "8CEE2920F82777E0800DD1AD4CACD1E31E585E07" : 0,
+    "05AC6CD993F68C0709F9EF73F594686697E91EEE" : 0,
+    "A807948ACB4487F441165246C2C71068A30465AA" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "FCDDAADF-998A-4A1A-9873-45DB655B8432",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "8CEE2920F82777E0800DD1AD4CACD1E31E585E07" : "ffplay\/ffmpeg\/",
+    "05AC6CD993F68C0709F9EF73F594686697E91EEE" : "ffplay\/x264\/",
+    "A807948ACB4487F441165246C2C71068A30465AA" : "ffplay\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "ffplay",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "ffplay\/ffplay.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "git:\/\/git.videolan.org\/x264.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "05AC6CD993F68C0709F9EF73F594686697E91EEE"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "git:\/\/source.ffmpeg.org\/ffmpeg.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "8CEE2920F82777E0800DD1AD4CACD1E31E585E07"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/wlanjie\/ffplay.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "A807948ACB4487F441165246C2C71068A30465AA"
+    }
+  ]
+}
