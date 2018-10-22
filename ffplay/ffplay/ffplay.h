@@ -22,7 +22,7 @@
 #include "libavutil/eval.h"
 #include "libavutil/pixdesc.h"
 #include "libavutil/imgutils.h"
-#include "config.h"
+//#include "config.h"
 #include "libswresample/swresample.h"
 #include "libswscale/swscale.h"
 #include "libavcodec/avfft.h"

@@ -14,7 +14,10 @@
 
 void ff_log_callback(void *avcl, int level, const char *fmt, va_list vl) {
     char log[1024];
-//    snprintf(log, sizeof(log), fmt, vl);
+    snprintf(log, 1024, "%s", fmt);
+    char printLog[1024];
+    vsnprintf(printLog, 1024, log, vl);
+    printf("%s\n", printLog);
 }
 
 int main(int argc, const char * argv[]) {
@@ -26,7 +29,7 @@ int main(int argc, const char * argv[]) {
 //    int ret = init_ffplay("/Users/wlanjie/Desktop/sintel.mp4");
 //    int ret = init_ffplay("rtmp://live.hkstv.hk.lxdns.com/live/hks");
 //    int ret = init_ffplay("rtmp://192.168.0.68/live/test");
-    int ret = init_ffplay("rtmp://192.168.1.103/live/test");
+    int ret = init_ffplay("/Users/wlanjie/Desktop/ks_orig.mp4");
     if (ret < 0) {
         av_log(NULL, AV_LOG_ERROR, "init_ffplay error %d\n", ret);
     }

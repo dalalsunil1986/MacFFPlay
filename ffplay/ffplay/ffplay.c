@@ -884,7 +884,7 @@ int decoder_decode_frame(Decoder *d, AVFrame *frame, AVSubtitle *sub) {
     return got_frame;
 }
 
-void decoder_destroy(Decoder *d) {
+void decoder_release(Decoder *d) {
     av_packet_unref(&d->pkt);
     avcodec_free_context(&d->avctx);
 }
@@ -1715,7 +1715,7 @@ static void stream_component_close(VideoState *is, int stream_index) {
         case AVMEDIA_TYPE_AUDIO:
             decoder_abort(&is->auddec, &is->sampq);
             SDL_CloseAudio();
-            decoder_destroy(&is->auddec);
+            decoder_release(&is->auddec);
             swr_free(&is->swr_ctx);
             av_freep(&is->audio_buf1);
             is->audio_buf1_size = 0;
@@ -1730,7 +1730,7 @@ static void stream_component_close(VideoState *is, int stream_index) {
             break;
         case AVMEDIA_TYPE_VIDEO:
             decoder_abort(&is->viddec, &is->pictq);
-            decoder_destroy(&is->viddec);
+            decoder_release(&is->viddec);
             break;
         default:
             break;
@@ -2550,6 +2550,14 @@ void event_loop(VideoState *cur_stream) {
                 }
                 break;
                 
+            case SDLK_q: 
+                do_exit(cur_stream);
+                break;
+            case SDLK_SPACE:
+                stream_toggle_pause(cur_stream);
+                cur_stream->step = 0;
+                break;
+
             case FF_ALLOC_EVENT:
                 alloc_picture(event.user.data1);
                 break;
