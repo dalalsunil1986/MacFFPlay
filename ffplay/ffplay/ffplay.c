@@ -540,6 +540,7 @@ int audio_decoder_frame(VideoState *is) {
         frame_queue_next(&is->sampq);
     } while (af->serial != is->audioq.serial);
     
+    printf("audio finished = %d \n", is->auddec.finished);
     data_size = av_samples_get_buffer_size(NULL, av_frame_get_channels(af->frame), af->frame->nb_samples,
                                            af->frame->format, 1);
     
@@ -806,7 +807,7 @@ int decoder_decode_frame(Decoder *d, AVFrame *frame, AVSubtitle *sub) {
             AVPacket pkt;
             do {
                 if (d->queue->nb_packets == 0) {
-                    SDL_CondSignal(d->empty_queue_cond);
+                    pthread_cond_signal(&d->empty_queue_cond);
                 }
                 if (packet_queue_get(d->queue, &pkt, 1, &d->pkt_serial) < 0) {
                     return -1;
@@ -1252,7 +1253,7 @@ int video_thread(void *arg) {
     return ret;
 }
 
-void decoder_init(Decoder *d, AVCodecContext *avctx, PacketQueue *queue, SDL_cond *empty_queue_cond) {
+void decoder_init(Decoder *d, AVCodecContext *avctx, PacketQueue *queue, pthread_cond_t empty_queue_cond) {
     memset(d, 0, sizeof(Decoder));
     d->avctx = avctx;
     d->queue = queue;
@@ -1411,7 +1412,7 @@ void stream_seek(VideoState *is, int64_t pos, int64_t rel, int seek_by_bytes) {
             is->seek_flags |= AVSEEK_FLAG_BYTE;
         }
         is->seek_req = 1;
-        SDL_CondSignal(is->continue_read_thread);
+        pthread_cond_signal(&is->continue_read_thread);
     }
 }
 
@@ -1539,7 +1540,7 @@ int read_thread(void *arg) {
     st_index[AVMEDIA_TYPE_SUBTITLE] = av_find_best_stream(ic, AVMEDIA_TYPE_SUBTITLE, st_index[AVMEDIA_TYPE_SUBTITLE],
                                                           (st_index[AVMEDIA_TYPE_AUDIO] > 0 ? st_index[AVMEDIA_TYPE_AUDIO] : st_index[AVMEDIA_TYPE_VIDEO]),
                                                            NULL, 0);
-    is->show_mode = show_mode;
+//    is->show_mode = show_mode;
     if (st_index[AVMEDIA_TYPE_VIDEO] >= 0) {
         AVStream *st = ic->streams[st_index[AVMEDIA_TYPE_VIDEO]];
         AVCodecParameters *codecpar = st->codecpar;
@@ -1779,7 +1780,7 @@ void stream_close(VideoState *is) {
     frame_queue_destory(&is->pictq);
     frame_queue_destory(&is->sampq);
     frame_queue_destory(&is->subpq);
-    SDL_DestroyCond(is->continue_read_thread);
+    pthread_cond_destroy(&is->continue_read_thread);
     sws_freeContext(is->img_convert_ctx);
     sws_freeContext(is->sub_convert_ctx);
     av_free(is->filename);
@@ -1836,6 +1837,7 @@ VideoState *stream_open(const char *filename) {
         stream_close(is);
         return NULL;
     }
+    
     if (!(is->continue_read_thread = SDL_CreateCond())) {
         av_log(NULL, AV_LOG_FATAL, "Thread SDL_CreateCond(): %s\n", SDL_GetError());
         stream_close(is);
@@ -2239,7 +2241,7 @@ void video_display(VideoState *is) {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
     if (is->audio_st && is->show_mode != SHOW_MODE_VIDEO) {
-//        video_audio_display(is);
+        video_audio_display(is);
     } else if (is->video_st) {
         video_image_display(is);
     }
@@ -2403,7 +2405,7 @@ static void video_refresh(void *opaque, double *remaining_time)
         }
         *remaining_time = FFMIN(*remaining_time, is->last_vis_time + rdftspeed - time);
     }
-    
+    printf("video finished = %d\n", is->viddec.finished);
     if (is->video_st) {
     retry:
         if (frame_queue_nb_remaining(&is->pictq) == 0) {
@@ -2540,6 +2542,10 @@ void alloc_picture(VideoState *is) {
 void event_loop(VideoState *cur_stream) {
     SDL_Event event;
     for (;;) {
+        if (cur_stream->viddec.finished) {
+            do_exit(cur_stream);
+            return;
+        }
         refresh_loop_wait_event(cur_stream, &event);
         switch (event.type) {
             case SDL_KEYDOWN:

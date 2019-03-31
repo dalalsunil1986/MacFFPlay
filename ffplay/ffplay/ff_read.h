@@ -1,31 +1,32 @@
 //
-//  ffplay.h
+//  ff_read.h
 //  ffplay
 //
-//  Created by wlanjie on 16/6/27.
-//  Copyright © 2016年 com.wlanjie.ffplay. All rights reserved.
+//  Created by wlanjie on 2018/10/22.
+//  Copyright © 2018年 com.wlanjie.ffplay. All rights reserved.
 //
 
-#ifndef ffplay_h
-#define ffplay_h
+#ifndef ff_read_h
+#define ff_read_h
 
-#include "SDL.h"
+#include <stdio.h>
+#include <pthread.h>
+#include <math.h>
+
+#define DEBUG
+
+#ifdef DEBUG
+#include <fstream>
+#include <iostream>
+#endif
+
+extern "C" {
 #include "libavcodec/avcodec.h"
 #include "libavutil/time.h"
 #include "libavformat/avformat.h"
-#include "libavfilter/avfilter.h"
-#include "libavutil/opt.h"
-#include "libavfilter/buffersrc.h"
-#include "libavfilter/buffersink.h"
-#include "libavutil/avstring.h"
 #include "libavutil/display.h"
 #include "libavutil/eval.h"
-#include "libavutil/pixdesc.h"
-#include "libavutil/imgutils.h"
-//#include "config.h"
-#include "libswresample/swresample.h"
-#include "libswscale/swscale.h"
-#include "libavcodec/avfft.h"
+}
 
 #define MAX_QUEUE_SIZE (15 * 1024 * 1024)
 #define MIN_FRAMES 25
@@ -85,8 +86,6 @@
 
 #define DEBUG 1
 
-int init_ffplay(const char *filename);
-
 enum {
     AV_SYNC_AUDIO_MASTER, /* default choice */
     AV_SYNC_VIDEO_MASTER,
@@ -143,7 +142,6 @@ typedef struct Frame {
     AVRational sar;
     AVSubtitle sub;
     AVSubtitleRect **subrects;
-    SDL_Texture *bmp;
     int allocated;
     int reallocated;
     int width;
@@ -153,8 +151,8 @@ typedef struct Frame {
 } Frame;
 
 typedef struct PacketQueue {
-    SDL_mutex *mutex;
-    SDL_cond *cond;
+    pthread_mutex_t mutex;
+    pthread_cond_t cond;
     int abort_request;
     int serial;
     int nb_packets;
@@ -164,8 +162,8 @@ typedef struct PacketQueue {
 
 typedef struct FrameQueue {
     Frame queue[FRAME_QUEUE_SIZE];
-    SDL_mutex *mutex;
-    SDL_cond *cond;
+    pthread_mutex_t mutex;
+    pthread_cond_t cond;
     PacketQueue *pktq;
     int max_size;
     int keep_last;
@@ -212,7 +210,7 @@ typedef struct VideoState {
     int audio_diff_avg_count;
     double audio_diff_cum;
     int av_sync_type;
-    SDL_Thread *read_tid;
+    pthread_t read_tid;
     AVStream *audio_st;
     Decoder auddec;
     
@@ -256,22 +254,12 @@ typedef struct VideoState {
     double last_vis_time;
     int last_i_start;
     int reft_bits;
-    RDFTContext *rdft;
-    FFTSample *rdft_data;
     int rdft_bits;
     int xpos;
     AVStream *subtitle_st;
-    SDL_Texture *sub_texture;
-    SDL_Texture *vis_texture;
     
     struct SwsContext *sub_convert_ctx;
     struct SwsContext *img_convert_ctx;
-    
-    AVFilterContext *in_video_filter;
-    AVFilterContext *out_video_filter;
-    AVFilterContext *in_audio_filter;
-    AVFilterContext *out_audio_filter;
-    AVFilterGraph *agraph;
     
     int16_t sample_array[SAMPLE_ARRAY_SIZE];
     int sample_array_index;
@@ -283,31 +271,83 @@ typedef struct VideoState {
         SHOW_MODE_RDFT,
         SHOW_MODE_NB
     } show_mode;
+    
+    class FFmpegRead* object;
 } VideoState;
 
-static char *wanted_stream_spec[AVMEDIA_TYPE_NB] = {0};
-static int av_sync_type = AV_SYNC_AUDIO_MASTER;
-static int64_t start_time = AV_NOPTS_VALUE; /* 如果不是AV_NOPTS_VALUE, 则从这个时间开始播放*/
-static enum ShowMode show_mode = SHOW_MODE_NONE;
-static int default_width = 640;
-static int default_height = 480;
-static int lowres;
-static int fast = 0;
-static AVPacket flush_pkt;
-static int decoder_reorder_pts;
-static int autorotate = 0;
-static int infinite_buffer = -1;
-static int loop = 1;
-static int autoexit;
-static int64_t duration = AV_NOPTS_VALUE;
-static int display_disable;
-static double rdftspeed = 0.02;
-static int screen_width = 0;
-static int screen_height = 0;
-static int is_full_screen;
+class FFmpegRead {
+public:
+    FFmpegRead();
+    ~FFmpegRead();
+    int init(const char* filename);
+    
+private:
+    int frameQueueInit(FrameQueue *f, PacketQueue *pktq, int maxSize, int keepLast);
+    Frame* frameQueuePeekWritable(FrameQueue* f);
+    Frame* frameQueuePeekReadable(FrameQueue* f);
+    void frameQueuePush(FrameQueue* f);
+    Frame* frameQueuePeek(FrameQueue* f);
+    int frameQueueNbRemaining(FrameQueue* f);
+    Frame* frameQueuePeekLast(FrameQueue* f);
+    Frame* frameQueuePeekNext(FrameQueue* f);
+    void frameQueueUnrefItem(Frame* vp);
+    void frameQueueNext(FrameQueue* f);
+    void frameQueueSignal(FrameQueue* f);
+    void frameQueueDestroy(FrameQueue* f);
+    int packetQueueInit(PacketQueue* q);
+    int packetQueueGet(PacketQueue* q, AVPacket* pkt, int block, int* serial);
+    int packetQueuePut(PacketQueue* q, AVPacket* pkt);
+    int packetQueuePutPrivate(PacketQueue* q, AVPacket* packet);
+    int packetQueuePutNullPacket(PacketQueue* q, int streamIndex);
+    void packetQueueStart(PacketQueue* q);
+    void packetQueueAbort(PacketQueue* q);
+    void packetQueueFlush(PacketQueue* q);
+    void packetQueueDestroy(PacketQueue* q);
+    void setClockAt(Clock* c, double pts, int serial, double time);
+    void setClock(Clock* c, double pts, int serial);
+    double getClock(Clock* c);
+    void setClockSpeed(Clock* c, double speed);
+    void syncClockToSlave(Clock* c, Clock* slave);
+    void initClock(Clock* clock, int* serial);
+    static int decodeInterruptCb(void* ctx);
+    int getMasterSyncType(VideoState* is);
+    double getMasterClock(VideoState* is);
+    void streamSeek(VideoState* is, int64_t pos, int64_t rel, int seekByBytes);
+    void streamTogglePause(VideoState* is);
+    void stepToNextFrame(VideoState* is);
+    int getVideoFrame(VideoState* is, AVFrame* frame);
+    int decoderDecodeFrame(Decoder* d, AVFrame* frame, AVSubtitle* sub);
+    double getRotation(AVStream* st);
+    
+    static void* readThread(void* arg);
+    static void readThreadFailed(VideoState* is, AVFormatContext* ic, pthread_mutex_t waitMutex);
+    
+    VideoState* streamOpen(const char* filename);
+    void streamClose(VideoState* st);
+    
+    static void streamComponentClose(VideoState* is, int streamIndex);
+    static void decoderRelease(FFmpegRead* read, Decoder* d);
+    static void decoderAbort(FFmpegRead* read, Decoder* d, FrameQueue* fq);
+    static int streamComponentOpen(VideoState* is, int streamIndex, FFmpegRead* read);
+    static void decoderInit(Decoder* d, AVCodecContext* avctx, PacketQueue* queue, pthread_cond_t emptyQueueCond);
+    static int decoderStart(Decoder* d, void* (*fn) (void*), void* arg, FFmpegRead* read);
+    static void* videoThread(void* arg);
+    static void* audioThread(void* arg);
+private:
+    AVPacket flushPacket;
+    int av_sync_type;
+    int64_t startTime;
+    char *wanted_stream_spec[AVMEDIA_TYPE_NB];
+    int lowres;
+    int fast;
+    bool autoexit;
+    int loop;
+    int64_t duration;
+    int infinite_buffer;
+//    static int decoderReorderPts;
+#ifdef DEBUG
+    std::ofstream outputStream;
+#endif
+};
 
-static SDL_Window *window;
-static SDL_Renderer *renderer;
-
-static int64_t audio_callback_time;
-#endif /* ffplay_h */
+#endif /* ff_read_h */

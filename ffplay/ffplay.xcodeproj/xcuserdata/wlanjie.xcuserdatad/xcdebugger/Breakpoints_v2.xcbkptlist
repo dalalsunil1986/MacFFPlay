@@ -10,12 +10,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ffplay/ffplay.c"
-            timestampString = "561890282.958506"
+            timestampString = "575658423.125507"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1774"
             endingLineNumber = "1774"
-            landmarkName = "stream_close"
+            landmarkName = "stream_close()"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
@@ -26,12 +26,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ffplay/ffplay.c"
-            timestampString = "561890282.959293"
+            timestampString = "575658423.125578"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1794"
             endingLineNumber = "1794"
-            landmarkName = "do_exit"
+            landmarkName = "do_exit()"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
@@ -42,12 +42,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ffplay/ffplay.c"
-            timestampString = "561890282.959797"
+            timestampString = "575658423.1256289"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "982"
             endingLineNumber = "982"
-            landmarkName = "audio_thread"
+            landmarkName = "audio_thread()"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
@@ -58,12 +58,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ffplay/ffplay.c"
-            timestampString = "561890282.9602309"
+            timestampString = "575658423.125675"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1236"
             endingLineNumber = "1236"
-            landmarkName = "video_thread"
+            landmarkName = "video_thread()"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>

@@ -6,61 +6,6 @@
 	objectVersion = 46;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		702684F81FFDD55C008E2331 /* libx264.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 702684F71FFDD55C008E2331 /* libx264.a */; };
-		702685021FFDD571008E2331 /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 702684F91FFDD570008E2331 /* libavutil.a */; };
-		702685031FFDD571008E2331 /* libpostproc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 702684FA1FFDD570008E2331 /* libpostproc.a */; };
-		702685041FFDD571008E2331 /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 702684FB1FFDD570008E2331 /* libavfilter.a */; };
-		702685051FFDD571008E2331 /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 702684FC1FFDD570008E2331 /* libavcodec.a */; };
-		702685061FFDD571008E2331 /* libavdevice.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 702684FD1FFDD570008E2331 /* libavdevice.a */; };
-		702685071FFDD571008E2331 /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 702684FE1FFDD570008E2331 /* libavformat.a */; };
-		702685081FFDD571008E2331 /* libavresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 702684FF1FFDD570008E2331 /* libavresample.a */; };
-		702685091FFDD571008E2331 /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 702685001FFDD570008E2331 /* libswresample.a */; };
-		7026850A1FFDD571008E2331 /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 702685011FFDD570008E2331 /* libswscale.a */; };
-		70639CF71D3A354A0094474E /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 70C58BB81D20FACB002EBA2E /* main.c */; };
-		70639CF81D3A354A0094474E /* ffplay.c in Sources */ = {isa = PBXBuildFile; fileRef = 70860AD11D3785FD00167A22 /* ffplay.c */; };
-		706BBD4B2179C88800415ADC /* OpenCL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 706BBD4A2179C88700415ADC /* OpenCL.framework */; };
-		706BBD50217DA6B200415ADC /* libmp3lame.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 706BBD4F217DA6B200415ADC /* libmp3lame.a */; };
-		706BBD52217DA76C00415ADC /* libxvidcore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 706BBD51217DA76C00415ADC /* libxvidcore.a */; };
-		70C58BC01D20FAFF002EBA2E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70C58BBF1D20FAFF002EBA2E /* AudioToolbox.framework */; };
-		70C58BC21D20FB08002EBA2E /* libc.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 70C58BC11D20FB08002EBA2E /* libc.tbd */; };
-		70C58BC41D20FB0E002EBA2E /* VideoDecodeAcceleration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70C58BC31D20FB0E002EBA2E /* VideoDecodeAcceleration.framework */; };
-		70C58BC71D20FB16002EBA2E /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70C58BC51D20FB16002EBA2E /* Security.framework */; };
-		70C58BC81D20FB16002EBA2E /* SecurityFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70C58BC61D20FB16002EBA2E /* SecurityFoundation.framework */; };
-		70C58BCA1D20FB1D002EBA2E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70C58BC91D20FB1D002EBA2E /* Foundation.framework */; };
-		70C58BCC1D20FB22002EBA2E /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70C58BCB1D20FB22002EBA2E /* CoreMedia.framework */; };
-		70C58BCE1D20FB28002EBA2E /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70C58BCD1D20FB28002EBA2E /* QTKit.framework */; };
-		70C58BD11D20FB31002EBA2E /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70C58BCF1D20FB31002EBA2E /* Quartz.framework */; };
-		70C58BD21D20FB31002EBA2E /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70C58BD01D20FB31002EBA2E /* QuartzCore.framework */; };
-		70C58BD41D20FB36002EBA2E /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70C58BD31D20FB36002EBA2E /* CoreFoundation.framework */; };
-		70C58BD61D20FB3B002EBA2E /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70C58BD51D20FB3B002EBA2E /* AVFoundation.framework */; };
-		70C58BD81D20FB40002EBA2E /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 70C58BD71D20FB40002EBA2E /* libiconv.tbd */; };
-		70C58BDA1D20FB47002EBA2E /* libbz2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 70C58BD91D20FB47002EBA2E /* libbz2.tbd */; };
-		70C58BDC1D20FB4D002EBA2E /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 70C58BDB1D20FB4D002EBA2E /* libz.tbd */; };
-		70C58BDE1D20FB54002EBA2E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70C58BDD1D20FB54002EBA2E /* CoreGraphics.framework */; };
-		70C58BE01D20FB59002EBA2E /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70C58BDF1D20FB59002EBA2E /* AppKit.framework */; };
-		70C58BE21D20FB5F002EBA2E /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70C58BE11D20FB5F002EBA2E /* OpenGL.framework */; };
-		70C58BE51D20FC43002EBA2E /* libSDL2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 70C58BE41D20FC43002EBA2E /* libSDL2.a */; };
-		70C58BFC1D21037D002EBA2E /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70C58BFB1D21037D002EBA2E /* VideoToolbox.framework */; };
-		70C58BFE1D210869002EBA2E /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70C58BFD1D210869002EBA2E /* CoreAudio.framework */; };
-		70C58C001D2108B4002EBA2E /* ForceFeedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70C58BFF1D2108B4002EBA2E /* ForceFeedback.framework */; };
-		70C58C021D21091C002EBA2E /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70C58C011D21091B002EBA2E /* IOKit.framework */; };
-		70C58C041D2109B7002EBA2E /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70C58C031D2109B7002EBA2E /* CoreVideo.framework */; };
-		70C58C061D2109C3002EBA2E /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70C58C051D2109C3002EBA2E /* Carbon.framework */; };
-/* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		70C58BB31D20FACB002EBA2E /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
 		702684F71FFDD55C008E2331 /* libx264.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libx264.a; path = ../x264/build/lib/libx264.a; sourceTree = "<group>"; };
 		702684F91FFDD570008E2331 /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavutil.a; path = ../ffmpeg/build/lib/libavutil.a; sourceTree = "<group>"; };
@@ -75,10 +20,11 @@
 		706BBD4A2179C88700415ADC /* OpenCL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenCL.framework; path = System/Library/Frameworks/OpenCL.framework; sourceTree = SDKROOT; };
 		706BBD4F217DA6B200415ADC /* libmp3lame.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmp3lame.a; path = ../lame/3.100/lib/libmp3lame.a; sourceTree = "<group>"; };
 		706BBD51217DA76C00415ADC /* libxvidcore.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxvidcore.a; path = ../xvid/1.3.5/lib/libxvidcore.a; sourceTree = "<group>"; };
-		70860AD11D3785FD00167A22 /* ffplay.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ffplay.c; sourceTree = "<group>"; };
-		70860AD21D3785FD00167A22 /* ffplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffplay.h; sourceTree = "<group>"; };
-		70C58BB51D20FACB002EBA2E /* ffplay */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ffplay; sourceTree = BUILT_PRODUCTS_DIR; };
-		70C58BB81D20FACB002EBA2E /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		706BBD53217DD2A800415ADC /* ff_read.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ff_read.cc; sourceTree = "<group>"; };
+		706BBD54217DD2A800415ADC /* ff_read.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ff_read.h; sourceTree = "<group>"; };
+		706BBD56217EEF7F00415ADC /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		706BBD58218C2EDC00415ADC /* ffplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffplay.h; sourceTree = "<group>"; };
+		706BBD59218C2EDC00415ADC /* ffplay.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ffplay.c; sourceTree = "<group>"; };
 		70C58BBF1D20FAFF002EBA2E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		70C58BC11D20FB08002EBA2E /* libc.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libc.tbd; path = usr/lib/libc.tbd; sourceTree = SDKROOT; };
 		70C58BC31D20FB0E002EBA2E /* VideoDecodeAcceleration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoDecodeAcceleration.framework; path = System/Library/Frameworks/VideoDecodeAcceleration.framework; sourceTree = SDKROOT; };
@@ -105,54 +51,6 @@
 		70C58C031D2109B7002EBA2E /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		70C58C051D2109C3002EBA2E /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
-
-/* Begin PBXFrameworksBuildPhase section */
-		70C58BB21D20FACB002EBA2E /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				706BBD52217DA76C00415ADC /* libxvidcore.a in Frameworks */,
-				706BBD50217DA6B200415ADC /* libmp3lame.a in Frameworks */,
-				706BBD4B2179C88800415ADC /* OpenCL.framework in Frameworks */,
-				702685021FFDD571008E2331 /* libavutil.a in Frameworks */,
-				702685031FFDD571008E2331 /* libpostproc.a in Frameworks */,
-				702685041FFDD571008E2331 /* libavfilter.a in Frameworks */,
-				702685051FFDD571008E2331 /* libavcodec.a in Frameworks */,
-				702685061FFDD571008E2331 /* libavdevice.a in Frameworks */,
-				702685071FFDD571008E2331 /* libavformat.a in Frameworks */,
-				702685081FFDD571008E2331 /* libavresample.a in Frameworks */,
-				702685091FFDD571008E2331 /* libswresample.a in Frameworks */,
-				7026850A1FFDD571008E2331 /* libswscale.a in Frameworks */,
-				702684F81FFDD55C008E2331 /* libx264.a in Frameworks */,
-				70C58C061D2109C3002EBA2E /* Carbon.framework in Frameworks */,
-				70C58C041D2109B7002EBA2E /* CoreVideo.framework in Frameworks */,
-				70C58C021D21091C002EBA2E /* IOKit.framework in Frameworks */,
-				70C58C001D2108B4002EBA2E /* ForceFeedback.framework in Frameworks */,
-				70C58BFE1D210869002EBA2E /* CoreAudio.framework in Frameworks */,
-				70C58BFC1D21037D002EBA2E /* VideoToolbox.framework in Frameworks */,
-				70C58BE51D20FC43002EBA2E /* libSDL2.a in Frameworks */,
-				70C58BE21D20FB5F002EBA2E /* OpenGL.framework in Frameworks */,
-				70C58BE01D20FB59002EBA2E /* AppKit.framework in Frameworks */,
-				70C58BDE1D20FB54002EBA2E /* CoreGraphics.framework in Frameworks */,
-				70C58BDC1D20FB4D002EBA2E /* libz.tbd in Frameworks */,
-				70C58BDA1D20FB47002EBA2E /* libbz2.tbd in Frameworks */,
-				70C58BD81D20FB40002EBA2E /* libiconv.tbd in Frameworks */,
-				70C58BD61D20FB3B002EBA2E /* AVFoundation.framework in Frameworks */,
-				70C58BD41D20FB36002EBA2E /* CoreFoundation.framework in Frameworks */,
-				70C58BD11D20FB31002EBA2E /* Quartz.framework in Frameworks */,
-				70C58BD21D20FB31002EBA2E /* QuartzCore.framework in Frameworks */,
-				70C58BCE1D20FB28002EBA2E /* QTKit.framework in Frameworks */,
-				70C58BCC1D20FB22002EBA2E /* CoreMedia.framework in Frameworks */,
-				70C58BCA1D20FB1D002EBA2E /* Foundation.framework in Frameworks */,
-				70C58BC71D20FB16002EBA2E /* Security.framework in Frameworks */,
-				70C58BC81D20FB16002EBA2E /* SecurityFoundation.framework in Frameworks */,
-				70C58BC41D20FB0E002EBA2E /* VideoDecodeAcceleration.framework in Frameworks */,
-				70C58BC21D20FB08002EBA2E /* libc.tbd in Frameworks */,
-				70C58BC01D20FAFF002EBA2E /* AudioToolbox.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		702684F61FFDD55B008E2331 /* Frameworks */ = {
@@ -188,7 +86,6 @@
 		70C58BB61D20FACB002EBA2E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				70C58BB51D20FACB002EBA2E /* ffplay */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -196,9 +93,11 @@
 		70C58BB71D20FACB002EBA2E /* ffplay */ = {
 			isa = PBXGroup;
 			children = (
-				70C58BB81D20FACB002EBA2E /* main.c */,
-				70860AD11D3785FD00167A22 /* ffplay.c */,
-				70860AD21D3785FD00167A22 /* ffplay.h */,
+				706BBD59218C2EDC00415ADC /* ffplay.c */,
+				706BBD58218C2EDC00415ADC /* ffplay.h */,
+				706BBD53217DD2A800415ADC /* ff_read.cc */,
+				706BBD54217DD2A800415ADC /* ff_read.h */,
+				706BBD56217EEF7F00415ADC /* main.cpp */,
 			);
 			path = ffplay;
 			sourceTree = "<group>";
@@ -237,41 +136,16 @@
 		};
 /* End PBXGroup section */
 
-/* Begin PBXNativeTarget section */
-		70C58BB41D20FACB002EBA2E /* ffplay */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 70C58BBC1D20FACB002EBA2E /* Build configuration list for PBXNativeTarget "ffplay" */;
-			buildPhases = (
-				70C58BB11D20FACB002EBA2E /* Sources */,
-				70C58BB21D20FACB002EBA2E /* Frameworks */,
-				70C58BB31D20FACB002EBA2E /* CopyFiles */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = ffplay;
-			productName = ffplay;
-			productReference = 70C58BB51D20FACB002EBA2E /* ffplay */;
-			productType = "com.apple.product-type.tool";
-		};
-/* End PBXNativeTarget section */
-
 /* Begin PBXProject section */
 		70C58BAD1D20FACB002EBA2E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = com.wlanjie.ffplay;
-				TargetAttributes = {
-					70C58BB41D20FACB002EBA2E = {
-						CreatedOnToolsVersion = 7.3;
-					};
-				};
 			};
 			buildConfigurationList = 70C58BB01D20FACB002EBA2E /* Build configuration list for PBXProject "ffplay" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
@@ -281,22 +155,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				70C58BB41D20FACB002EBA2E /* ffplay */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXSourcesBuildPhase section */
-		70C58BB11D20FACB002EBA2E /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				70639CF71D3A354A0094474E /* main.c in Sources */,
-				70639CF81D3A354A0094474E /* ffplay.c in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
 		70C58BBA1D20FACB002EBA2E /* Debug */ = {
@@ -308,13 +169,23 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "-";
@@ -336,7 +207,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -352,18 +223,28 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -374,55 +255,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
-			};
-			name = Release;
-		};
-		70C58BBD1D20FACB002EBA2E /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
-				HEADER_SEARCH_PATHS = (
-					"${PROJECT_DIR}/../include",
-					"${PROJECT_DIR}/../ffmpeg",
-					"${PROJECT_DIR}/../x264/build/include",
-					"${PROJECT_DIR}/../lame/3.100/include",
-					"${PROJECT_DIR}/../xvid/1.3.5/include",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"${PROJECT_DIR}/..",
-					"${PROJECT_DIR}/../ffmpeg/build/lib",
-					"${PROJECT_DIR}/../x264/build/lib",
-					"${PROJECT_DIR}/../lame/3.100/lib",
-					"${PROJECT_DIR}/../xvid/1.3.5/lib",
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx10.13;
-			};
-			name = Debug;
-		};
-		70C58BBE1D20FACB002EBA2E /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
-				HEADER_SEARCH_PATHS = (
-					"${PROJECT_DIR}/../include",
-					"${PROJECT_DIR}/../ffmpeg",
-					"${PROJECT_DIR}/../x264/build/include",
-					"${PROJECT_DIR}/../lame/3.100/include",
-					"${PROJECT_DIR}/../xvid/1.3.5/include",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"${PROJECT_DIR}/..",
-					"${PROJECT_DIR}/../ffmpeg/build/lib",
-					"${PROJECT_DIR}/../x264/build/lib",
-					"${PROJECT_DIR}/../lame/3.100/lib",
-					"${PROJECT_DIR}/../xvid/1.3.5/lib",
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx10.13;
 			};
 			name = Release;
 		};
@@ -434,15 +269,6 @@
 			buildConfigurations = (
 				70C58BBA1D20FACB002EBA2E /* Debug */,
 				70C58BBB1D20FACB002EBA2E /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		70C58BBC1D20FACB002EBA2E /* Build configuration list for PBXNativeTarget "ffplay" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				70C58BBD1D20FACB002EBA2E /* Debug */,
-				70C58BBE1D20FACB002EBA2E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
