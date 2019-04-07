@@ -20,10 +20,10 @@
 		70F90F48225668A9003AB70D /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70F90F47225668A9003AB70D /* VideoToolbox.framework */; };
 		70F90F5522575340003AB70D /* libSDL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 70F90F5422575340003AB70D /* libSDL.a */; };
 		70F90F5722575407003AB70D /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 70F90F5622575407003AB70D /* libswscale.a */; };
-		70F90F5922575543003AB70D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 70F90F2B225666D1003AB70D /* main.cpp */; };
 		70F90F5E2258575E003AB70D /* ff_read.cc in Sources */ = {isa = PBXBuildFile; fileRef = 70F90F5A2258575E003AB70D /* ff_read.cc */; };
 		70F90F5F2258575E003AB70D /* ffplay.c in Sources */ = {isa = PBXBuildFile; fileRef = 70F90F5D2258575E003AB70D /* ffplay.c */; };
 		70F90F61225857AA003AB70D /* libSDL2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 70F90F60225857AA003AB70D /* libSDL2.a */; };
+		70F90F63225A4652003AB70D /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 70F90F62225A4652003AB70D /* main.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -59,6 +59,7 @@
 		70F90F5C2258575E003AB70D /* ff_read.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ff_read.h; sourceTree = "<group>"; };
 		70F90F5D2258575E003AB70D /* ffplay.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ffplay.c; sourceTree = "<group>"; };
 		70F90F60225857AA003AB70D /* libSDL2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL2.a; path = ../../../../usr/local/Cellar/sdl2/2.0.9/lib/libSDL2.a; sourceTree = "<group>"; };
+		70F90F62225A4652003AB70D /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +112,7 @@
 				70F90F5D2258575E003AB70D /* ffplay.c */,
 				70F90F5B2258575E003AB70D /* ffplay.h */,
 				70F90F2B225666D1003AB70D /* main.cpp */,
+				70F90F62225A4652003AB70D /* main.c */,
 			);
 			path = FFmpegRead;
 			sourceTree = "<group>";
@@ -192,7 +194,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				70F90F5922575543003AB70D /* main.cpp in Sources */,
+				70F90F63225A4652003AB70D /* main.c in Sources */,
 				70F90F5E2258575E003AB70D /* ff_read.cc in Sources */,
 				70F90F5F2258575E003AB70D /* ffplay.c in Sources */,
 			);

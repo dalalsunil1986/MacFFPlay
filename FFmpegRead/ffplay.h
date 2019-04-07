@@ -88,8 +88,6 @@
 
 #define DEBUG 1
 
-int init_ffplay(const char *filename);
-
 enum {
     AV_SYNC_AUDIO_MASTER, /* default choice */
     AV_SYNC_VIDEO_MASTER,
@@ -305,8 +303,24 @@ static int screen_width = 0;
 static int screen_height = 0;
 static int is_full_screen;
 
+#ifdef __APPLE__
 static SDL_Window *window;
 static SDL_Renderer *renderer;
+#endif
 
 static int64_t audio_callback_time;
+
+VideoState* init_ffplay(const char *filename);
+Frame* frame_queue_peek_writable(FrameQueue* f);
+Frame* frame_queue_peek_readable(FrameQueue* f);
+Frame* frame_queue_peek(FrameQueue* f);
+Frame* frame_queue_peek_last(FrameQueue* f);
+Frame* frame_queue_peek_next(FrameQueue* f);
+int frame_queue_nb_remaining(FrameQueue *f);
+void frame_queue_next(FrameQueue *f);
+int get_master_sync_type(VideoState *is);
+double get_clock(Clock *c) ;
+double get_master_clock(VideoState *is);
+void set_clock(Clock *c, double pts, int serial);
+void sync_clock_to_slave(Clock *c, Clock *slave);
 #endif /* ffplay_h */
