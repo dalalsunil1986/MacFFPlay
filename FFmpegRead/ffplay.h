@@ -218,7 +218,7 @@ typedef struct VideoState {
     pthread_t read_tid;
     AVStream *audio_st;
     Decoder auddec;
-    int (*open_audio)(void *opaque, int64_t wanted_channel_layout, int wanted_nb_channels, int wanted_sample_rate, AudioParams *audio_hw_params);
+    int (*audio_open)(void *opaque, int64_t wanted_channel_layout, int wanted_nb_channels, int wanted_sample_rate, AudioParams *audio_hw_params);
     
     AVStream *video_st;
     int viddec_width;
@@ -265,8 +265,6 @@ typedef struct VideoState {
     int rdft_bits;
     int xpos;
     AVStream *subtitle_st;
-    SDL_Texture *sub_texture;
-    SDL_Texture *vis_texture;
 #endif
     
     struct SwsContext *sub_convert_ctx;
@@ -298,15 +296,11 @@ static AVPacket flush_pkt;
 static int64_t duration = AV_NOPTS_VALUE;
 static double rdftspeed = 0.02;
 
-#ifdef __APPLE__
-static SDL_Window *window;
-static SDL_Renderer *renderer;
-#endif
-
 static int64_t audio_callback_time;
 
 /** public method */
 int av_start(VideoState* is, const char* file_name);
+void av_destroy(VideoState* is);
 /** stream pause or resume */
 void stream_toggle_pause(VideoState *is);
 

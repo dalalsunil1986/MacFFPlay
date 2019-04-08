@@ -14,6 +14,12 @@ int default_height;
 static int screen_width = 0;
 static int screen_height = 0;
 static int is_full_screen;
+#ifdef __APPLE__
+static SDL_Window *window;
+static SDL_Renderer *renderer;
+static SDL_Texture *sub_texture;
+static SDL_Texture *vis_texture;
+#endif
 
 void calculate_display_rect(SDL_Rect *rect, int scr_xleft, int scr_ytop, int scr_width, int scr_height, int pic_width,
                             int pic_height, AVRational pic_sar) {
@@ -187,7 +193,7 @@ void video_image_display(VideoState *is) {
                             sp->width = vp->width;
                             sp->height = vp->height;
                         }
-                        if (realloc_texture(&is->sub_texture, SDL_PIXELFORMAT_ARGB8888, sp->width, sp->height, SDL_BLENDMODE_BLEND, 1) < 0) {
+                        if (realloc_texture(&sub_texture, SDL_PIXELFORMAT_ARGB8888, sp->width, sp->height, SDL_BLENDMODE_BLEND, 1) < 0) {
                             return;
                         }
                         for (int i = 0; i < sp->sub.num_rects; i++) {
@@ -203,9 +209,9 @@ void video_image_display(VideoState *is) {
                                 av_log(NULL, AV_LOG_FATAL, "Can't initialize the conversion context.\n");
                                 return;
                             }
-                            if (!SDL_LockTexture(is->sub_texture, (SDL_Rect *) sub_rect, (void **)&pixels, &picth)) {
+                            if (!SDL_LockTexture(sub_texture, (SDL_Rect *) sub_rect, (void **)&pixels, &picth)) {
                                 sws_scale(is->sub_convert_ctx, (const uint8_t * const *) sub_rect->data, sub_rect->linesize, 0, sub_rect->h, &pixels, &picth);
-                                SDL_UnlockTexture(is->sub_texture);
+                                SDL_UnlockTexture(sub_texture);
                             }
                         }
                         sp->uploaded = 1;
@@ -227,7 +233,7 @@ void video_image_display(VideoState *is) {
         SDL_RenderCopy(renderer, vp->bmp, NULL, &rect);
         if (sp) {
 #if USE_ONEPASS_SUBTITLE_RENDER
-            SDL_RenderCopy(renderer, is->sub_texture, NULL, &rect);
+            SDL_RenderCopy(renderer, sub_texture, NULL, &rect);
 #else
             double xratio = (double) rect.w / (double) sp->width;
             double yratio = (double) rect.h / (double) sp->height;
@@ -374,11 +380,11 @@ void video_retry(VideoState *is, double *remaining_time) {
                             AVSubtitleRect *sub_rect = sp->sub.rects[i];
                             uint8_t *pixels;
                             int pitch;
-                            if (!SDL_LockTexture(is->sub_texture, (SDL_Rect *)sub_rect, (void **)&pixels, &pitch)) {
+                            if (!SDL_LockTexture(sub_texture, (SDL_Rect *)sub_rect, (void **)&pixels, &pitch)) {
                                 for (int j = 0; j < sub_rect->h; j++, pixels += pitch) {
                                     memset(pixels, 0, sub_rect->w << 2);
                                 }
-                                SDL_UnlockTexture(is->sub_texture);
+                                SDL_UnlockTexture(sub_texture);
                             }
                         }
                     }
@@ -481,10 +487,10 @@ static void video_refresh(void *opaque, double *remaining_time)
                                 uint8_t *pixels;
                                 int pitch, j;
                                 
-                                if (!SDL_LockTexture(is->sub_texture, (SDL_Rect *)sub_rect, (void **)&pixels, &pitch)) {
+                                if (!SDL_LockTexture(sub_texture, (SDL_Rect *)sub_rect, (void **)&pixels, &pitch)) {
                                     for (j = 0; j < sub_rect->h; j++, pixels += pitch)
                                         memset(pixels, 0, sub_rect->w << 2);
-                                    SDL_UnlockTexture(is->sub_texture);
+                                    SDL_UnlockTexture(sub_texture);
                                 }
                             }
                         }
@@ -562,6 +568,25 @@ void event_loop(VideoState *cur_stream) {
         switch (event.type) {
             case SDL_KEYDOWN:
                 switch (event.key.keysym.sym) {
+                    case SDLK_ESCAPE:
+                    case SDLK_q:
+                        av_destroy(cur_stream);
+#ifdef __APPLE__
+                        if (vis_texture)
+                            SDL_DestroyTexture(vis_texture);
+                        if (sub_texture)
+                            SDL_DestroyTexture(sub_texture);
+#endif
+                        
+#ifdef __APPLE__
+                        if (renderer)
+                            SDL_DestroyRenderer(renderer);
+                        if (window)
+                            SDL_DestroyWindow(window);
+                        SDL_Quit();
+                        exit(0);
+#endif
+                        break;
                     case SDLK_SPACE:
                         stream_toggle_pause(cur_stream);
 //                         cur_stream->step = 0;
@@ -632,6 +657,121 @@ void event_loop(VideoState *cur_stream) {
     }
 }
 
+
+#ifdef __APPLE__
+/* prepare a new audio buffer */
+void sdl_audio_callback(void *opaque, Uint8 *stream, int len) {
+    VideoState *is = opaque;
+    int audio_size, len1;
+    audio_callback_time = av_gettime_relative();
+    while (len > 0) {
+        if (is->audio_buf_index >= is->audio_buf_size) {
+            audio_size = audio_decoder_frame(is);
+            if (audio_size < 0) {
+                is->audio_buf = NULL;
+                is->audio_buf_size = SDL_AUDIO_MIN_BUFFER_SIZE / is->audio_tgt.frame_size * is->audio_tgt.frame_size;
+            } else {
+                if (is->show_mode != SHOW_MODE_VIDEO) {
+                    update_sample_display(is, (int16_t *) is->audio_buf, audio_size);
+                }
+                is->audio_buf_size = audio_size;
+            }
+            is->audio_buf_index = 0;
+        }
+        len1 = is->audio_buf_size - is->audio_buf_index;
+        if (len1 > len) {
+            len1 = len;
+        }
+        if (!is->muted && is->audio_buf && is->audio_volume == MAXVOLUME) {
+            memcpy(stream, (uint8_t *)is->audio_buf + is->audio_buf_index, len1);
+        } else {
+            memset(stream, 0, len1);
+            if (!is->muted && is->audio_buf) {
+                SDL_MixAudio(stream, (uint8_t *)is->audio_buf + is->audio_buf_index, len1, is->audio_volume);
+            }
+        }
+        len -= len1;
+        stream += len1;
+        is->audio_buf_index += len1;
+    }
+    is->audio_write_buf_size = is->audio_buf_size - is->audio_buf_index;
+    /* Let's assume the audio driver that is used by SDL has two periods. */
+    if (!isnan(is->audio_clock)) {
+        set_clock_at(&is->audclk, is->audio_clock - (double) (2 * is->audio_hw_buf_size + is->audio_write_buf_size) / is->audio_tgt.bytes_per_sec,
+                     is->audio_clock_serial, audio_callback_time / 1000000.0);
+        sync_clock_to_slave(&is->extclk, &is->audclk);
+    }
+}
+
+int audio_open(void *opaque, int64_t wanted_channel_layout, int wanted_nb_channels, int wanted_sample_rate, AudioParams *audio_hw_params) {
+    SDL_AudioSpec wanted_spec, spec;
+    const char *env;
+    static const int next_nb_channels[] = { 0, 0, 1, 6, 2, 6, 4, 6 };
+    static const int next_sample_rates[] = { 0, 44100, 48000, 96000, 192000 };
+    int next_sample_rate_idx = FF_ARRAY_ELEMS(next_sample_rates) - 1;
+    
+    env = SDL_getenv("SDL_AUDIO_CHANNELS");
+    if (env) {
+        wanted_nb_channels = atoi(env);
+        wanted_channel_layout = av_get_default_channel_layout(wanted_nb_channels);
+    }
+    if (!wanted_channel_layout || wanted_nb_channels != av_get_channel_layout_nb_channels(wanted_channel_layout)) {
+        wanted_channel_layout = av_get_default_channel_layout(wanted_nb_channels);
+        wanted_channel_layout &= ~AV_CH_LAYOUT_STEREO_DOWNMIX;
+    }
+    wanted_nb_channels = av_get_channel_layout_nb_channels(wanted_channel_layout);
+    wanted_spec.channels = wanted_nb_channels;
+    wanted_spec.freq = wanted_sample_rate;
+    if (wanted_spec.freq <= 0 || wanted_spec.channels <= 0) {
+        av_log(NULL, AV_LOG_ERROR, "Invalid sample rate or channel count.\n");
+        return -1;
+    }
+    while (next_sample_rate_idx && next_sample_rates[next_sample_rate_idx] >= wanted_spec.freq) {
+        next_sample_rate_idx--;
+    }
+    wanted_spec.format = AUDIO_S16SYS;
+    wanted_spec.silence = 0;
+    wanted_spec.samples = FFMAX(SDL_AUDIO_MIN_BUFFER_SIZE, 2 << av_log2(wanted_spec.freq / SDL_AUDIO_MAX_CALLBACKS_PER_SEC));
+    wanted_spec.callback = sdl_audio_callback;
+    wanted_spec.userdata = opaque;
+    while (SDL_OpenAudio(&wanted_spec, &spec) < 0) {
+        av_log(NULL, AV_LOG_WARNING, "SDL_OpenAudio (%d channels, %d Hz): %s\n", wanted_spec.channels, wanted_spec.freq, SDL_GetError());
+        wanted_spec.channels = next_nb_channels[FFMIN(7, wanted_spec.channels)];
+        if (!wanted_spec.channels) {
+            wanted_spec.freq = next_sample_rates[FFMIN(7, wanted_nb_channels)];
+            wanted_spec.channels = wanted_nb_channels;
+            if (!wanted_spec.freq) {
+                av_log(NULL, AV_LOG_ERROR, "No more combinations to try, audio open failed\n");
+                return -1;
+            }
+        }
+        wanted_channel_layout = av_get_default_channel_layout(wanted_spec.channels);
+    }
+    if (spec.format != AUDIO_S16SYS) {
+        av_log(NULL, AV_LOG_ERROR, "SDL advised audio format %d is not supported!\n", spec.channels);
+        return -1;
+    }
+    if (spec.channels != wanted_nb_channels) {
+        wanted_channel_layout = av_get_default_channel_layout(spec.channels);
+        if (!wanted_channel_layout) {
+            av_log(NULL, AV_LOG_ERROR, "SDL advised channel count %d is not supported!\n", spec.channels);
+            return -1;
+        }
+    }
+    audio_hw_params->fmt = AV_SAMPLE_FMT_S16;
+    audio_hw_params->freq = spec.freq;
+    audio_hw_params->channel_layout = wanted_channel_layout;
+    audio_hw_params->channels = spec.channels;
+    audio_hw_params->frame_size = av_samples_get_buffer_size(NULL, audio_hw_params->channels, 1, audio_hw_params->fmt, 1);
+    audio_hw_params->bytes_per_sec = av_samples_get_buffer_size(NULL, audio_hw_params->channels, audio_hw_params->freq, audio_hw_params->fmt, 1);
+    if (audio_hw_params->bytes_per_sec <= 0 || audio_hw_params->frame_size <= 0) {
+        av_log(NULL, AV_LOG_ERROR, "av_sample_get_buffer_size failed\n");
+        return -1;
+    }
+    return spec.size;
+}
+#endif
+
 int main(int argc, const char * argv[]) {
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER);
     SDL_EventState(SDL_SYSWMEVENT, SDL_IGNORE);
@@ -642,6 +782,7 @@ int main(int argc, const char * argv[]) {
         return -1;
     }
     
+    is->audio_open = audio_open;
     av_start(is, "/Users/wlanjie/Desktop/test/not_play.mp4");
     
     is->loop = 1;
