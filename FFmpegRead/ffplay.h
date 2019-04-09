@@ -18,13 +18,13 @@
 #include "libavfilter/buffersink.h"
 #include "libavutil/avstring.h"
 #include "libswresample/swresample.h"
+#include "libavutil/pixdesc.h"
 #ifdef __APPLE__
 #include "SDL.h"
 #include "libswscale/swscale.h"
 #include "libavcodec/avfft.h"
 #include "libavutil/display.h"
 #include "libavutil/eval.h"
-#include "libavutil/pixdesc.h"
 #include "libavutil/imgutils.h"
 #endif
 
@@ -146,7 +146,9 @@ typedef struct Frame {
     AVRational sar;
     AVSubtitle sub;
     AVSubtitleRect **subrects;
+#ifdef __APPLE__
     SDL_Texture *bmp;
+#endif
     int allocated;
     int reallocated;
     int width;
@@ -278,14 +280,6 @@ typedef struct VideoState {
     
     int16_t sample_array[SAMPLE_ARRAY_SIZE];
     int sample_array_index;
-    
-    enum ShowMode {
-        SHOW_MODE_NONE = -1,
-        SHOW_MODE_VIDEO = 0,
-        SHOW_MODE_WAVES,
-        SHOW_MODE_RDFT,
-        SHOW_MODE_NB
-    } show_mode;
 } VideoState;
 
 static char *wanted_stream_spec[AVMEDIA_TYPE_NB] = {0};

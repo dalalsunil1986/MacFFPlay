@@ -918,6 +918,7 @@ int queue_picture(VideoState *is, AVFrame *src_frame, double pts, double duratio
     vp->sar = src_frame->sample_aspect_ratio;
     vp->uploaded = 0;
     
+#ifdef __APPLE__
     if (!vp->bmp || !vp->allocated ||
         vp->width != src_frame->width ||
         vp->height != src_frame->height ||
@@ -961,6 +962,16 @@ int queue_picture(VideoState *is, AVFrame *src_frame, double pts, double duratio
         av_frame_move_ref(vp->frame, src_frame);
         frame_queue_push(&is->pictq);
     }
+#else
+    vp->width = src_frame->width;
+    vp->height = src_frame->height;
+    vp->pts = pts;
+    vp->duration = duration;
+    vp->pos = pos;
+    vp->serial = serial;
+    av_frame_move_ref(vp->frame, src_frame);
+    frame_queue_push(&is->pictq);
+#endif
     return 0;
 }
 
@@ -1281,12 +1292,14 @@ static void stream_component_close(VideoState *is, int stream_index) {
             is->audio_buf1_size = 0;
             is->audio_buf = NULL;
             
+#ifdef __APPLE__
             if (is->rdft) {
                 av_rdft_end(is->rdft);
                 av_freep(&is->rdft_data);
                 is->rdft = NULL;
                 is->rdft_bits = 0;
             }
+#endif
             break;
         case AVMEDIA_TYPE_VIDEO:
             decoder_abort(&is->viddec, &is->pictq);
@@ -1308,7 +1321,9 @@ static void stream_component_close(VideoState *is, int stream_index) {
             is->video_stream = -1;
             break;
         case AVMEDIA_TYPE_SUBTITLE:
+#ifdef __APPLE__
             is->subtitle_st = NULL;
+#endif
             is->subtitle_stream = -1;
             break;
         default:
@@ -1343,8 +1358,10 @@ void stream_close(VideoState *is) {
     frame_queue_destory(&is->sampq);
     frame_queue_destory(&is->subpq);
     pthread_cond_destroy(&is->continue_read_thread);
+#ifdef __APPLE__
     sws_freeContext(is->img_convert_ctx);
     sws_freeContext(is->sub_convert_ctx);
+#endif
     av_free(is->filename);
 
     av_free(is);
@@ -1457,9 +1474,7 @@ void* read_thread(void *arg) {
     if (st_index[AVMEDIA_TYPE_VIDEO] >= 0) {
         ret = stream_component_open(is, st_index[AVMEDIA_TYPE_VIDEO]);
     }
-    if (is->show_mode == SHOW_MODE_NONE) {
-        is->show_mode = ret >= 0 ? SHOW_MODE_VIDEO : SHOW_MODE_RDFT;
-    }
+
     if (st_index[AVMEDIA_TYPE_SUBTITLE] >= 0) {
         stream_component_open(is, st_index[AVMEDIA_TYPE_SUBTITLE]);
     }

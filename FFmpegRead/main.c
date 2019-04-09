@@ -259,9 +259,7 @@ void video_display(VideoState *is) {
     }
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
-    if (is->audio_st && is->show_mode != SHOW_MODE_VIDEO) {
-        //        video_audio_display(is);
-    } else if (is->video_st) {
+    if (is->video_st) {
         video_image_display(is);
     }
     SDL_RenderPresent(renderer);
@@ -336,7 +334,7 @@ void video_retry(VideoState *is, double *remaining_time) {
         }
         if (is->paused) {
             /* display picture*/
-            if (is->force_refresh && is->show_mode == SHOW_MODE_VIDEO && is->pictq.rindex_shown) {
+            if (is->force_refresh && is->pictq.rindex_shown) {
                 video_display(is);
                 return;
             }
@@ -349,7 +347,7 @@ void video_retry(VideoState *is, double *remaining_time) {
         if (time < is->frame_timer + delay) {
             *remaining_time = FFMIN(is->frame_timer + delay - time, *remaining_time);
             /* display picture*/
-            if (is->force_refresh && is->show_mode == SHOW_MODE_VIDEO && is->pictq.rindex_shown) {
+            if (is->force_refresh && is->pictq.rindex_shown) {
                 video_display(is);
                 return;
             }
@@ -400,7 +398,7 @@ void video_retry(VideoState *is, double *remaining_time) {
             stream_toggle_pause(is);
         }
     }
-    if (is->force_refresh && is->show_mode == SHOW_MODE_VIDEO && is->pictq.rindex_shown) {
+    if (is->force_refresh && is->pictq.rindex_shown) {
         video_display(is);
     }
 }
@@ -416,14 +414,14 @@ static void video_refresh(void *opaque, double *remaining_time)
     if (!is->paused && get_master_sync_type(is) == AV_SYNC_EXTERNAL_CLOCK)
         check_external_clock_speed(is);
     
-    if (is->show_mode != SHOW_MODE_VIDEO && is->audio_st) {
-        time = av_gettime_relative() / 1000000.0;
-        if (is->force_refresh || is->last_vis_time + rdftspeed < time) {
-            video_display(is);
-            is->last_vis_time = time;
-        }
-        *remaining_time = FFMIN(*remaining_time, is->last_vis_time + rdftspeed - time);
-    }
+//    if (is->show_mode != SHOW_MODE_VIDEO && is->audio_st) {
+//        time = av_gettime_relative() / 1000000.0;
+//        if (is->force_refresh || is->last_vis_time + rdftspeed < time) {
+//            video_display(is);
+//            is->last_vis_time = time;
+//        }
+//        *remaining_time = FFMIN(*remaining_time, is->last_vis_time + rdftspeed - time);
+//    }
     
     if (is->video_st) {
     retry:
@@ -509,7 +507,7 @@ static void video_refresh(void *opaque, double *remaining_time)
         }
     display:
         /* display picture */
-        if (is->force_refresh && is->show_mode == SHOW_MODE_VIDEO && is->pictq.rindex_shown)
+        if (is->force_refresh && is->pictq.rindex_shown)
             video_display(is);
     }
     is->force_refresh = 0;
@@ -523,7 +521,7 @@ void refresh_loop_wait_event(VideoState *is, SDL_Event *event) {
             av_usleep(remaining_time * 1000000.0);
         }
         remaining_time = REFRESH_RATE;
-        if (is->show_mode != SHOW_MODE_NONE && (!is->paused || is->force_refresh)) {
+        if ((!is->paused || is->force_refresh)) {
             video_refresh(is, &remaining_time);
         }
         SDL_PumpEvents();
@@ -671,9 +669,9 @@ void sdl_audio_callback(void *opaque, Uint8 *stream, int len) {
                 is->audio_buf = NULL;
                 is->audio_buf_size = SDL_AUDIO_MIN_BUFFER_SIZE / is->audio_tgt.frame_size * is->audio_tgt.frame_size;
             } else {
-                if (is->show_mode != SHOW_MODE_VIDEO) {
-                    update_sample_display(is, (int16_t *) is->audio_buf, audio_size);
-                }
+//                if (is->show_mode != SHOW_MODE_VIDEO) {
+//                    update_sample_display(is, (int16_t *) is->audio_buf, audio_size);
+//                }
                 is->audio_buf_size = audio_size;
             }
             is->audio_buf_index = 0;
